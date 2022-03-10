@@ -57,7 +57,7 @@ export function getButtonMiddleware({
 
             const { env, clientID, buttonSessionID, cspNonce, debug, buyerCountry, disableFunding, disableCard, userIDToken, amount, renderedButtons,
                 merchantID: sdkMerchantID, currency, intent, commit, vault, clientAccessToken, basicFundingEligibility, locale,
-                correlationID, cookies, enableFunding, style, paymentMethodToken, branded, fundingSource, allowBillingPayments, buttonSize } = getButtonParams(params, req, res);
+                correlationID, cookies, enableFunding, style, paymentMethodToken, branded, fundingSource, allowBillingPayments, buttonSize, platform, localTime } = getButtonParams(params, req, res);
 
             const { label, period, tagline, layout } = style;
             logger.info(req, `button_params`, { params: JSON.stringify(params) });
@@ -90,8 +90,11 @@ export function getButtonMiddleware({
             const personalizationEnabled = getPersonalizationEnabled(req);
             const personalizationPromise = resolvePersonalization(req, gqlBatch, {
                 logger, clientID, buyerCountry, locale, buttonSessionID, currency, intent, commit,
-                vault, label, period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility
+                vault, label, period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility, localTime, channel: platform
             });
+
+            console.log('DATA ELIAS')
+            console.dir({platform, localTime});
 
             gqlBatch.flush();
 

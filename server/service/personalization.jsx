@@ -55,7 +55,9 @@ const PERSONALIZATION_QUERY = `
         $renderedButtons: [FundingButtonType]
         $layout: ButtonLayouts
         $buttonSize: ButtonSizes,
-        $creditRiskVerified: Boolean
+        $creditRiskVerified: Boolean,
+        $localTime: String,
+        $channel: String,
     ) {
         checkoutCustomization(
             clientId: $clientID,
@@ -77,6 +79,8 @@ const PERSONALIZATION_QUERY = `
             layout: $layout
             buttonSize: $buttonSize,
             creditRiskVerified: $creditRiskVerified
+            localTime: $localTime,
+            channel: $channel
         ) {
             tagline {
                 text
@@ -121,7 +125,9 @@ export type PersonalizationOptions = {|
     renderedButtons : $ReadOnlyArray<$Values<typeof FUNDING>>,
     layout? : string,
     buttonSize? : string,
-    fundingEligibility : FundingEligibilityType
+    fundingEligibility : FundingEligibilityType,
+    localTime? : string,
+    channel? : string
 |};
 
 function getDefaultPersonalization() : Personalization {
@@ -153,7 +159,7 @@ function contentToJSX(content : string) : ComponentFunctionType<PersonalizationC
 
 export async function resolvePersonalization(req : ExpressRequest, gqlBatch : GraphQLBatchCall, personalizationOptions : PersonalizationOptions) : Promise<Personalization> {
     let { logger, clientID, locale, buyerCountry, buttonSessionID, currency, intent, commit, vault, label,
-        period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility } = personalizationOptions;
+        period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility, localTime, channel } = personalizationOptions;
 
     if (!personalizationEnabled) {
         return getDefaultPersonalization();
@@ -186,7 +192,9 @@ export async function resolvePersonalization(req : ExpressRequest, gqlBatch : Gr
         renderedButtons,
         layout,
         buttonSize,
-        creditRiskVerified
+        creditRiskVerified,
+        localTime,
+        channel
     };
 
     // Fix enum checking errors for strings on graphql by only sending truthy variables
