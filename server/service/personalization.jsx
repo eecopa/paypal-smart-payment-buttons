@@ -1,7 +1,7 @@
 /* @flow */
 /** @jsx node */
 
-import { COUNTRY, CURRENCY, INTENT, COMMIT, VAULT, FUNDING, FPTI_KEY } from '@paypal/sdk-constants';
+import { COUNTRY, CURRENCY, INTENT, COMMIT, VAULT, FUNDING, FPTI_KEY, PLATFORM } from '@paypal/sdk-constants';
 import type { FundingEligibilityType } from '@paypal/sdk-constants/src/types';
 import type { ComponentFunctionType } from 'jsx-pragmatic/src';
 import { node } from 'jsx-pragmatic';
@@ -55,7 +55,9 @@ const PERSONALIZATION_QUERY = `
         $renderedButtons: [FundingButtonType]
         $layout: ButtonLayouts
         $buttonSize: ButtonSizes,
-        $creditRiskVerified: Boolean
+        $creditRiskVerified: Boolean,
+        $localTime: String,
+        $channel: String
     ) {
         checkoutCustomization(
             clientId: $clientID,
@@ -76,7 +78,9 @@ const PERSONALIZATION_QUERY = `
             renderedButtons: $renderedButtons
             layout: $layout
             buttonSize: $buttonSize,
-            creditRiskVerified: $creditRiskVerified
+            creditRiskVerified: $creditRiskVerified,
+            localTime: $localTime,
+            channel: $channel
         ) {
             tagline {
                 text
@@ -121,7 +125,9 @@ export type PersonalizationOptions = {|
     renderedButtons : $ReadOnlyArray<$Values<typeof FUNDING>>,
     layout? : string,
     buttonSize? : string,
-    fundingEligibility : FundingEligibilityType
+    fundingEligibility : FundingEligibilityType,
+    localTime?: string,
+    channel: ?$Values<typeof PLATFORM>,
 |};
 
 function getDefaultPersonalization() : Personalization {
