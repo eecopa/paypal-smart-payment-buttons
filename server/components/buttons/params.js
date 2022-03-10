@@ -50,7 +50,7 @@ type ButtonInputParams = {|
     renderedButtons : $ReadOnlyArray<$Values<typeof FUNDING>>,
     allowBillingPayments? : boolean,
     buttonSize? : string,
-    localTime?: string
+    localTime? : string
 |};
 
 type Style = {|

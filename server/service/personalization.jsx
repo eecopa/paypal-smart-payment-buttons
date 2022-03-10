@@ -126,7 +126,7 @@ export type PersonalizationOptions = {|
     layout? : string,
     buttonSize? : string,
     fundingEligibility : FundingEligibilityType,
-    localTime?: string,
+    localTime? : string,
     channel: ?$Values<typeof PLATFORM>,
 |};
 
@@ -159,7 +159,7 @@ function contentToJSX(content : string) : ComponentFunctionType<PersonalizationC
 
 export async function resolvePersonalization(req : ExpressRequest, gqlBatch : GraphQLBatchCall, personalizationOptions : PersonalizationOptions) : Promise<Personalization> {
     let { logger, clientID, locale, buyerCountry, buttonSessionID, currency, intent, commit, vault, label,
-        period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility } = personalizationOptions;
+        period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility, localTime, channel } = personalizationOptions;
 
     if (!personalizationEnabled) {
         return getDefaultPersonalization();
@@ -192,7 +192,9 @@ export async function resolvePersonalization(req : ExpressRequest, gqlBatch : Gr
         renderedButtons,
         layout,
         buttonSize,
-        creditRiskVerified
+        creditRiskVerified,
+        localTime,
+        channel
     };
 
     // Fix enum checking errors for strings on graphql by only sending truthy variables

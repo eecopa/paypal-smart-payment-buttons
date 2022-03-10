@@ -93,6 +93,9 @@ export function getButtonMiddleware({
                 vault, label, period, tagline, personalizationEnabled, renderedButtons, layout, buttonSize, fundingEligibility, localTime, channel: platform
             });
 
+            console.log('DATA ELIAS')
+            console.dir({platform, localTime});
+
             gqlBatch.flush();
 
             let facilitatorAccessToken;
